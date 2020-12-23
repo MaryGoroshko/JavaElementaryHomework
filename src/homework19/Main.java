@@ -68,7 +68,7 @@ public class Main {
             Thread.sleep(3000);
             thread.interrupt();
         } catch (InterruptedException e) {
-            System.out.println("Current thread was interrupted/cancelled");
+            System.out.println("Current thread has been interrupted/cancelled");
             e.printStackTrace();
         }
     }
@@ -81,7 +81,7 @@ public class Main {
             Thread.sleep(3000);
             thread.interrupt();
         } catch (InterruptedException e) {
-            System.out.println("Current thread was interrupted/cancelled");
+            System.out.println("Current thread has been interrupted/cancelled");
             e.printStackTrace();
         }
     }
