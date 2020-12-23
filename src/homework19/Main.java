@@ -1,6 +1,7 @@
 package homework19;
 
 import homework19.task01Point.Point;
+import homework19.task01Point.PointSynchBlock1;
 import homework19.task01Point.PointSynchMethod;
 
 import java.util.concurrent.*;
@@ -14,6 +15,7 @@ public class Main {
     public void task1() {
         Point point = new Point();
         PointSynchMethod synchMethod = new PointSynchMethod();
+        PointSynchBlock1 synchBlock1 = new PointSynchBlock1();
 
         ExecutorService executor = Executors.newFixedThreadPool(5);
         Future<String> result = null;
@@ -21,6 +23,7 @@ public class Main {
             result = executor.submit(() -> {
                 point.move(1, 1);
                 synchMethod.move(1,1);
+                synchBlock1.move(1,1);
                 return "-";
             });
         }
@@ -28,6 +31,7 @@ public class Main {
             result.get(3, TimeUnit.SECONDS);
             System.out.println("Final result without synchronized  " + point.getX() + " : " + point.getY());
             System.out.println("Final result using synchronized method  " + synchMethod.getX() + " : " + synchMethod.getY());
+            System.out.println("Final result using synchronized block #1  " + synchBlock1.getX() + " : " + synchBlock1.getY());
         } catch (InterruptedException e) {
             System.out.println("Current thread has been interrupted/canceled");
             result.cancel(true);
@@ -41,6 +45,7 @@ public class Main {
             System.out.println("Point move has timed out and canceled");
             System.out.println("Last result without synchronized  " + point.getX() + " : " + point.getY());
             System.out.println("Last result using synchronized method  " + synchMethod.getX() + " : " + synchMethod.getY());
+            System.out.println("Last result using synchronized block #1  " + synchBlock1.getX() + " : " + synchBlock1.getY());
             e.printStackTrace();
         }
         executor.shutdown();
