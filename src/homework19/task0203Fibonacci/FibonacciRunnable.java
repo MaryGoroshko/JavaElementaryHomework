@@ -2,9 +2,9 @@ package homework19.task0203Fibonacci;
 
 public class FibonacciRunnable implements Runnable {
 
-    int number;
-    int num1 = 0;
-    int num2 = 1;
+    private int number;
+    private int num1 = 0;
+    private int num2 = 1;
 
     public FibonacciRunnable(int number) {
         this.number = number;
@@ -26,5 +26,13 @@ public class FibonacciRunnable implements Runnable {
             }
             System.out.println(fibonacciSum);
         }
+    }
+
+    public int getNum1() {
+        return num1;
+    }
+
+    public int getNum2() {
+        return num2;
     }
 }
