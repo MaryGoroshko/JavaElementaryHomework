@@ -1,13 +1,15 @@
 package homework19;
 
 import homework19.task01Point.*;
+import homework19.task0203Fibonacci.FibonacciThread;
 
 import java.util.concurrent.*;
 
 public class Main {
 
     public static void main(String[] args) {
-        new Main().task1();
+//        new Main().task1();
+        new Main().task2();
     }
 
     public void task1() {
@@ -22,10 +24,10 @@ public class Main {
         for (int i = 0; i < 2000; i++) {
             result = executor.submit(() -> {
                 point.move(1, 1);
-                synchMethod.move(1,1);
-                synchBlock1.move(1,1);
-                PointSynchBlock2.move(synchBlock2,1,1);
-                PointSynchMethodX.move(synchMethodX,1,1);
+                synchMethod.move(1, 1);
+                synchBlock1.move(1, 1);
+                PointSynchBlock2.move(synchBlock2, 1, 1);
+                PointSynchMethodX.move(synchMethodX, 1, 1);
                 return "-";
             });
         }
@@ -55,5 +57,17 @@ public class Main {
             e.printStackTrace();
         }
         executor.shutdown();
+    }
+
+    private void task2() {
+        FibonacciThread thread = new FibonacciThread(10);
+        thread.start();
+        try {
+            Thread.sleep(3000);
+            thread.interrupt();
+        } catch (InterruptedException e) {
+            System.out.println("Current thread was interrupted/cancelled");
+            e.printStackTrace();
+        }
     }
 }
