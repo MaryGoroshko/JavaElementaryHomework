@@ -1,6 +1,7 @@
 package homework19;
 
 import homework19.task01Point.*;
+import homework19.task0203Fibonacci.FibonacciRunnable;
 import homework19.task0203Fibonacci.FibonacciThread;
 
 import java.util.concurrent.*;
@@ -9,7 +10,8 @@ public class Main {
 
     public static void main(String[] args) {
 //        new Main().task1();
-        new Main().task2();
+//        new Main().task2();
+        new Main().task3();
     }
 
     public void task1() {
@@ -61,6 +63,19 @@ public class Main {
 
     private void task2() {
         FibonacciThread thread = new FibonacciThread(10);
+        thread.start();
+        try {
+            Thread.sleep(3000);
+            thread.interrupt();
+        } catch (InterruptedException e) {
+            System.out.println("Current thread was interrupted/cancelled");
+            e.printStackTrace();
+        }
+    }
+
+    private void task3() {
+        FibonacciRunnable task = new FibonacciRunnable(10);
+        Thread thread = new Thread(task);
         thread.start();
         try {
             Thread.sleep(3000);
