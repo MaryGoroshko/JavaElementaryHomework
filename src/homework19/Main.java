@@ -63,26 +63,61 @@ public class Main {
 
     private void task2() {
         FibonacciThread thread = new FibonacciThread(10);
-        thread.start();
+//        thread.start();
+//        try {
+//            Thread.sleep(3000);
+//            thread.interrupt();
+//        } catch (InterruptedException e) {
+//            System.out.println("Current thread was interrupted/cancelled");
+//            e.printStackTrace();
+//        }
+
+        /**логично было бы для прерывания через 3 секунды использовать interrupt
+         * но он устанавливает флаг, но не завершает поток
+         * другого подходящего метода у Thread не смогла найти для прерывания через определенное время
+         * stop прерывает поток,но он deprecated.
+         * что бы прервать поток через определенное время остается только использование executorа
+         * и метода get.*/
+
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        final Future<?> result = executor.submit(thread);
         try {
-            Thread.sleep(3000);
-            thread.interrupt();
-        } catch (InterruptedException e) {
-            System.out.println("Current thread was interrupted/cancelled");
-            e.printStackTrace();
+            result.get(3, TimeUnit.SECONDS);
+        } catch (InterruptedException | ExecutionException e) {
+            System.out.println("Current thread was interrupted/cancelled. " +
+                    "Last saved numbers: " + thread.getNum1() + ", " + thread.getNum2());
+            result.cancel(true);
+        } catch (TimeoutException e) {
+            result.cancel(true);
+            System.out.println("Thread has timed out and cancelled");
         }
+        executor.shutdown();
     }
 
     private void task3() {
         FibonacciRunnable task = new FibonacciRunnable(10);
-        Thread thread = new Thread(task);
-        thread.start();
+//        Thread thread = new Thread(task);
+//        thread.start();
+//        try {
+//            Thread.sleep(3000);
+//            thread.interrupt();
+//        } catch (InterruptedException e) {
+//            System.out.println("Current thread was interrupted/cancelled");
+//            e.printStackTrace();
+//        }
+
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        final Future<?> result = executor.submit(task);
         try {
-            Thread.sleep(3000);
-            thread.interrupt();
-        } catch (InterruptedException e) {
-            System.out.println("Current thread was interrupted/cancelled");
-            e.printStackTrace();
+            result.get(3, TimeUnit.SECONDS);
+        } catch (InterruptedException | ExecutionException e) {
+            System.out.println("Current thread was interrupted/cancelled. " +
+                    "Last saved numbers: " + task.getNum1() + ", " + task.getNum2());
+            result.cancel(true);
+        } catch (TimeoutException e) {
+            result.cancel(true);
+            System.out.println("Thread has timed out and cancelled");
         }
+        executor.shutdown();
     }
 }
