@@ -9,9 +9,11 @@ import java.util.concurrent.*;
 public class Main {
 
     public static void main(String[] args) {
-//        new Main().task1();
-        new Main().task2();
+        new Main().task1();
+//        new Main().task2();
 //        new Main().task3();
+//        new Main().task2a();
+//        new Main().task3a();
     }
 
     public void task1() {
@@ -73,8 +75,25 @@ public class Main {
         }
     }
 
+    //второй вариант решения:
+    private void task2a() {
+        FibonacciThread thread = new FibonacciThread(1525);
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        final Future<?> result = executor.submit(thread);
+        try {
+            result.get(3, TimeUnit.SECONDS);
+        } catch (InterruptedException | ExecutionException e) {
+            System.out.println("Current thread has been interrupted/canceled. ");
+            result.cancel(true);
+        } catch (TimeoutException e) {
+            result.cancel(true);
+            System.out.println("Thread has timed out and cancelled");
+        }
+        executor.shutdown();
+    }
+
     private void task3() {
-        FibonacciRunnable task = new FibonacciRunnable(15);
+        FibonacciRunnable task = new FibonacciRunnable(1555);
         Thread thread = new Thread(task);
         thread.start();
         try {
@@ -84,5 +103,22 @@ public class Main {
             System.out.println("Current thread has been interrupted/cancelled");
             e.printStackTrace();
         }
+    }
+
+    //второй вариант решения задачи прерывания потока и получения результата
+    private void task3a() {
+        FibonacciRunnable task = new FibonacciRunnable(1555);
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        final Future<?> result = executor.submit(task);
+        try {
+            result.get(3, TimeUnit.SECONDS);
+        } catch (InterruptedException | ExecutionException e) {
+            System.out.println("Current thread has been interrupted/canceled.");
+            result.cancel(true);
+        } catch (TimeoutException e) {
+            result.cancel(true);
+            System.out.println("Thread has timed out and cancelled");
+        }
+        executor.shutdown();
     }
 }
