@@ -12,7 +12,7 @@ public class FibonacciThread extends Thread {
 
     @Override
     public void run() {
-        while (!this.isInterrupted()) {
+        while (!Thread.currentThread().isInterrupted()) {
             System.out.println("Start of calculation Fibonacci " + number);
             if (number <= 1) System.out.println(BigInteger.valueOf(number));
 
