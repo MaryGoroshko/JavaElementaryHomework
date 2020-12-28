@@ -1,8 +1,9 @@
 package homework20;
 
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import homework20.singleton.Singleton;
+import homework20.singleton.SingletonSynch;
+
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Main {
@@ -12,7 +13,8 @@ public class Main {
     private AtomicInteger counter = new AtomicInteger(0);
 
     public static void main(String[] args) {
-        new Main().run();
+//        new Main().run();
+        new Main().singleton();
     }
 
     //Выполнить ожидание завершения задач с помощью CountDownLatch.
@@ -45,5 +47,30 @@ public class Main {
         }
 
         System.out.println("Actual: " + counter);
+    }
+
+    public void singleton() {
+        CountDownLatch doneSignal = new CountDownLatch(2_000);
+        ExecutorService executor = Executors.newFixedThreadPool(2_000);
+
+        final Runnable task = () -> {
+            Singleton.getInstance();
+            SingletonSynch.getInstance();
+            doneSignal.countDown();
+        };
+
+        for (int i = 0; i < 2_000; i++) {
+            executor.submit(task);
+        }
+
+        try {
+            doneSignal.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+//        Output:
+//        Int counter: 1998
+//        Atomic counter: 2000
     }
 }
