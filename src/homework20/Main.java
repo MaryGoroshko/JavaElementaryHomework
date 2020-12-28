@@ -14,7 +14,8 @@ public class Main {
 
     public static void main(String[] args) {
 //        new Main().run();
-        new Main().singleton();
+//        new Main().singleton();
+        new Main().print();
     }
 
     //Выполнить ожидание завершения задач с помощью CountDownLatch.
@@ -72,5 +73,21 @@ public class Main {
 //        Output:
 //        Int counter: 1998
 //        Atomic counter: 2000
+    }
+
+    public void print() {
+
+        HelloWorld helloWorld = new HelloWorld();
+        ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+
+        ScheduledFuture<?> result = executor.scheduleAtFixedRate(
+                helloWorld,0,10,TimeUnit.SECONDS);
+
+        executor.schedule(new Runnable() {
+            @Override
+            public void run() {
+                result.cancel(true);
+            }
+        }, 60, TimeUnit.SECONDS);
     }
 }
