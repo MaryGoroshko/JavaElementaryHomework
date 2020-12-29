@@ -3,10 +3,10 @@ package homework20.singleton;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class SingletonSynch {
-    private static SingletonSynch instance;
+    private static volatile SingletonSynch instance;
     private static AtomicInteger atomicInteger;
 
-    public SingletonSynch() {
+    private SingletonSynch() {
         atomicInteger = new AtomicInteger(0);
     }
 
