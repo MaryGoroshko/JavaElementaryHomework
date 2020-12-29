@@ -76,18 +76,39 @@ public class Main {
     }
 
     public void print() {
+        ScheduledExecutorService executor = Executors.newScheduledThreadPool(10);
 
-        HelloWorld helloWorld = new HelloWorld();
-        ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+        Runnable task = () -> {
+            CountDownLatch startSignal = new CountDownLatch(1);
+            executor.execute(() -> {
+                try {
+                    startSignal.await();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                System.out.print("Hello ");
+            });
+
+            executor.execute(() -> {
+                try {
+                    startSignal.await();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                System.out.print("World ");
+            });
+            startSignal.countDown();
+        };
 
         ScheduledFuture<?> result = executor.scheduleAtFixedRate(
-                helloWorld,0,10,TimeUnit.SECONDS);
+                task, 5, 5, TimeUnit.SECONDS);
 
         executor.schedule(new Runnable() {
             @Override
             public void run() {
                 result.cancel(true);
+                executor.shutdown();
             }
-        }, 60, TimeUnit.SECONDS);
+        }, 30, TimeUnit.SECONDS);
     }
 }
