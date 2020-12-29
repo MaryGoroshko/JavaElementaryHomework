@@ -101,11 +101,11 @@ public class Main {
         };
 
         ScheduledFuture<?> result = executor.scheduleAtFixedRate(
-                task, 5, 5, TimeUnit.SECONDS);
+                task, 1, 10, TimeUnit.SECONDS);
 
         executor.schedule(() -> {
             result.cancel(true);
             executor.shutdown();
-        }, 30, TimeUnit.SECONDS);
+        }, 60, TimeUnit.SECONDS);
     }
 }
