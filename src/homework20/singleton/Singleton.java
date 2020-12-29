@@ -5,7 +5,7 @@ public class Singleton {
     private static Singleton instance;
     private static int counterInt;
 
-    public Singleton() {
+    private Singleton() {
     }
 
     public static Singleton getInstance() {
