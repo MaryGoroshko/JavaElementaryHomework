@@ -103,12 +103,9 @@ public class Main {
         ScheduledFuture<?> result = executor.scheduleAtFixedRate(
                 task, 5, 5, TimeUnit.SECONDS);
 
-        executor.schedule(new Runnable() {
-            @Override
-            public void run() {
-                result.cancel(true);
-                executor.shutdown();
-            }
+        executor.schedule(() -> {
+            result.cancel(true);
+            executor.shutdown();
         }, 30, TimeUnit.SECONDS);
     }
 }
