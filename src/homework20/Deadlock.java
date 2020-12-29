@@ -3,6 +3,10 @@ package homework20;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * Воспроизвести проблему dead lock любым способом.
+ */
+
 public class Deadlock {
 
     public Object lock1 = new Object();
@@ -18,6 +22,7 @@ public class Deadlock {
         ExecutorService executor = Executors.newFixedThreadPool(2);
         executor.submit(deadLock1);
         executor.submit(deadLock2);
+        executor.shutdown();
     }
 
     private class DeadLock1 implements Runnable {
@@ -45,6 +50,6 @@ public class Deadlock {
     }
 
 //    Output:
-//    DeadLock1: Start running
 //    DeadLock2: Start running
+//    DeadLock1: Start running
 }
